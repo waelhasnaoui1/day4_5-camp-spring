@@ -5,21 +5,22 @@ import com.sip.camp_spring_day_4_5.repositories.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/provider")
 public class ProviderController {
 
-    final ProviderRepository providerRepository;
+    private final ProviderRepository providerRepository;
 
     @Autowired
     public ProviderController(ProviderRepository providerRepository){
         this.providerRepository = providerRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping("/list")
     public String listProviders(Model model){
         model.addAttribute("providers", providerRepository.findAll());
         return "provider/listProvider";
@@ -32,6 +33,30 @@ public class ProviderController {
         return "provider/addProvider";
     }
 
-    
+    @PostMapping("/add")
+    public String addProvider(@Valid Provider provider, Model model){
 
+        providerRepository.save(provider);
+        return "redirect:list";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteProvider(@PathVariable("id") long id){
+        Provider provider = providerRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("Invalid Provider Id : " + id)
+        );
+        providerRepository.delete(provider);
+        return "../list";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showProvideFormToUpdate(@PathVariable("id") long id, Model model){
+        Provider provider = providerRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("Invalid Provider Id : " + id)
+        );
+        model.addAttribute("provider",provider);
+        providerRepository.save(provider);
+        return "provider/updateProvider";
+    }
+    
 }

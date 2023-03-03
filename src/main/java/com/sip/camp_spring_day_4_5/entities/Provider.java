@@ -8,7 +8,7 @@ public class Provider {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @NotBlank(message = "Name is mandatory")
     @Column(name="name")
