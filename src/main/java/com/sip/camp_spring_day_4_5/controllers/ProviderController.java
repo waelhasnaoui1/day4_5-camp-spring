@@ -5,6 +5,7 @@ import com.sip.camp_spring_day_4_5.repositories.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,8 +35,11 @@ public class ProviderController {
     }
 
     @PostMapping("/add")
-    public String addProvider(@Valid Provider provider, Model model){
-
+    public String addProvider(@Valid Provider provider, BindingResult result, Model model){
+        System.out.println(provider);
+        if(result.hasErrors()){
+            return "provider/addProvider";
+        }
         providerRepository.save(provider);
         return "redirect:list";
     }
@@ -46,7 +50,7 @@ public class ProviderController {
                 () -> new IllegalArgumentException("Invalid Provider Id : " + id)
         );
         providerRepository.delete(provider);
-        return "../list";
+        return "redirect:../list";
     }
 
     @GetMapping("/edit/{id}")
@@ -58,5 +62,5 @@ public class ProviderController {
         providerRepository.save(provider);
         return "provider/updateProvider";
     }
-    
+
 }

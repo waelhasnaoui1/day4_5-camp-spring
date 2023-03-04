@@ -32,8 +32,12 @@ public class Provider {
         this.email = email;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -48,9 +52,7 @@ public class Provider {
         return email;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+
 
     public void setName(String name) {
         this.name = name;
@@ -62,5 +64,15 @@ public class Provider {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "Provider{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
