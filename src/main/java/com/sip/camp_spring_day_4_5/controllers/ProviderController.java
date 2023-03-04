@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/provider")
@@ -23,7 +24,12 @@ public class ProviderController {
 
     @GetMapping("/list")
     public String listProviders(Model model){
-        model.addAttribute("providers", providerRepository.findAll());
+        List<Provider> providers = (List<Provider>) providerRepository.findAll();
+
+        if(providers.size() == 0){
+            providers = null;
+        }
+        model.addAttribute("providers", providers);
         return "provider/listProvider";
     }
 
