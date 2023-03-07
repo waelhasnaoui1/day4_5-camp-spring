@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/article")
@@ -28,7 +29,11 @@ public class ArticleController {
 
     @GetMapping("list")
     public String listArticle(Model model){
-        model.addAttribute("articles",articleRepository.findAll());
+        List<Article> articles = articleRepository.findAll();
+        if(articles.size() == 0 ){
+            articles = null;
+        }
+        model.addAttribute("articles",articles);
         return "article/listArticles";
     }
 
@@ -43,8 +48,8 @@ public class ArticleController {
     public String addArticle(
             @Valid Article article,
             BindingResult result,
-            Model model,
             @RequestParam(name="providerId",required = false) Long id){
+
         if(result.hasErrors()){
             return "article/add";
         }
@@ -53,7 +58,7 @@ public class ArticleController {
         );
         article.setProvider(provider);
         articleRepository.save(article);
-        return "article/list";
+        return "redirect:list";
     }
 
     @GetMapping("delete/{id}")

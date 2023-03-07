@@ -72,6 +72,7 @@ public class Article {
                 "id=" + id +
                 ", label='" + label + '\'' +
                 ", price=" + price +
+                ", provider=" + provider.getName() +
                 '}';
     }
 }
