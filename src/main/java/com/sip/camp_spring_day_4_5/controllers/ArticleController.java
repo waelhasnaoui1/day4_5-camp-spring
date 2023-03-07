@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/article")
@@ -51,7 +52,7 @@ public class ArticleController {
             @RequestParam(name="providerId",required = false) Long id){
 
         if(result.hasErrors()){
-            return "article/add";
+            return "article/addArticle";
         }
         Provider provider = providerRepository.findById(id).orElseThrow(
                 ()-> new IllegalArgumentException("provider with this id doesn't exist:" + id)
@@ -63,10 +64,11 @@ public class ArticleController {
 
     @GetMapping("delete/{id}")
     public String deleteArticle(@PathVariable("id") Long id, Model model){
-        Article article = articleRepository.findById(id).orElseThrow(
-                ()-> new IllegalArgumentException("Invalid id"+id)
-        );
-        articleRepository.delete(article);
+        Optional<Article> article = articleRepository.findById(id);
+        if(article.isPresent()){
+            articleRepository.delete(article.get());
+        }
+
         return "redirect:../list";
     }
 

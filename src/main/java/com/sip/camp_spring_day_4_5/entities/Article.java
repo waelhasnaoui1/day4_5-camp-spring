@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Article {
@@ -18,6 +19,7 @@ public class Article {
     @Column(name="label")
     private String label;
 
+    @NotNull(message = "Please put a price")
     @Column(name="price")
     private float price;
 
