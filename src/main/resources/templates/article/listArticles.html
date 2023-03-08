@@ -14,8 +14,14 @@
                 <a th:href="@{/article/add}" class="btn btn-primary my-2">Add Article</a>
                 <div th:case="null">
                     <h2>No Articles yet</h2>
+
                 </div>
                 <div th:case="*">
+                    <div th:switch="${index}">
+                        <span th:case="-1" class="badge badge-success" th:text="${deleteMessage}"></span>
+                        <span th:case="0" class="badge badge-danger" th:text="${deleteMessage}"></span>
+                    </div>
+                    <h3 th:text="${deleteMessage}"></h3>
                     <table class="table">
                         <thead>
                         <tr>

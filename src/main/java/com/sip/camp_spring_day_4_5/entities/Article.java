@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 public class Article {
@@ -77,4 +78,19 @@ public class Article {
                 ", provider=" + provider.getName() +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Article article = (Article) o;
+        return Float.compare(article.price, price) == 0 && id.equals(article.id) && label.equals(article.label) && provider.equals(article.provider);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, label, price, provider);
+    }
+
+
 }

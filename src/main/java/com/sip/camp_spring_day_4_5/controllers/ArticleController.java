@@ -17,7 +17,11 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/article")
 public class ArticleController {
+    static private  List<Article> articles;
+    static private int index = 0;
 
+    static private boolean isDeleting = false;
+    private String messageToListView = "";
     private final ArticleRepository articleRepository;
 
     private final ProviderRepository providerRepository;
@@ -26,15 +30,19 @@ public class ArticleController {
     public ArticleController(ArticleRepository articleRepository, ProviderRepository providerRepository){
         this.articleRepository = articleRepository;
         this.providerRepository = providerRepository;
+        this.articles = articleRepository.findAll();
     }
 
     @GetMapping("list")
-    public String listArticle(Model model){
+    public String listArticle( Model model){
         List<Article> articles = articleRepository.findAll();
         if(articles.size() == 0 ){
             articles = null;
         }
         model.addAttribute("articles",articles);
+        model.addAttribute("deleteMessage",isDeleting ? messageToListView : "");
+        model.addAttribute("index",index);
+        isDeleting=false;
         return "article/listArticles";
     }
 
@@ -64,9 +72,22 @@ public class ArticleController {
 
     @GetMapping("delete/{id}")
     public String deleteArticle(@PathVariable("id") Long id, Model model){
+        this.articles = articleRepository.findAll();
         Optional<Article> article = articleRepository.findById(id);
+        isDeleting = true;
+
         if(article.isPresent()){
             articleRepository.delete(article.get());
+            messageToListView= "message Deleted";
+            index=-1;
+            return "redirect:../list";
+        }
+        else if (index == -1) {
+            messageToListView = "item already deleted";
+            index=0;
+        }
+        else{
+            messageToListView="item doesn't exist in the database";
         }
 
         return "redirect:../list";
@@ -98,10 +119,7 @@ public class ArticleController {
         article.setProvider(provider);
         articleRepository.save(article);
 
-        return "article/listArticles";
+        return "redirect:../list";
     }
-
-
-
 
 }
