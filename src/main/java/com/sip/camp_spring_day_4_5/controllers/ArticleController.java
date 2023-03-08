@@ -148,4 +148,12 @@ public class ArticleController {
         return "redirect:../list";
     }
 
+    @GetMapping("show/{id}")
+    public String showArticleDetails(@PathVariable("id") Long id,Model model){
+
+        Article article = articleRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Invalid provider Id:" + id));
+        model.addAttribute("article",article);
+        return "article/showArticle";
+    }
+
 }
