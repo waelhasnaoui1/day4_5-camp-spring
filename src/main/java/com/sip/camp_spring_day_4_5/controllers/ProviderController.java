@@ -2,6 +2,7 @@ package com.sip.camp_spring_day_4_5.controllers;
 
 import com.sip.camp_spring_day_4_5.entities.Provider;
 import com.sip.camp_spring_day_4_5.repositories.ProviderRepository;
+import com.sip.camp_spring_day_4_5.services.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,14 +18,16 @@ public class ProviderController {
 
     private final ProviderRepository providerRepository;
 
+    private final ProviderService providerService;
     @Autowired
-    public ProviderController(ProviderRepository providerRepository){
+    public ProviderController(ProviderRepository providerRepository,ProviderService providerService){
         this.providerRepository = providerRepository;
+        this.providerService = providerService;
     }
 
     @GetMapping("/list")
     public String listProviders(Model model){
-        List<Provider> providers = (List<Provider>) providerRepository.findAll();
+        List<Provider> providers = providerService.getAllProviders();
 
         if(providers.size() == 0){
             providers = null;

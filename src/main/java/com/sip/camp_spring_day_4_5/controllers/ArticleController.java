@@ -9,14 +9,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @Controller
 @RequestMapping("/article")
 public class ArticleController {
+
+    public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/static/uploads";
     static private  List<Article> articles;
     static private int index = 0;
 
@@ -57,7 +65,9 @@ public class ArticleController {
     public String addArticle(
             @Valid Article article,
             BindingResult result,
-            @RequestParam(name="providerId",required = false) Long id){
+            @RequestParam(name="providerId",required = false) Long id,
+            @RequestParam("files")MultipartFile[] files
+            ){
 
         if(result.hasErrors()){
             return "article/addArticle";
@@ -66,6 +76,22 @@ public class ArticleController {
                 ()-> new IllegalArgumentException("provider with this id doesn't exist:" + id)
         );
         article.setProvider(provider);
+
+        ///upload image to server
+        MultipartFile file = files[0];
+        Path fileNameAndPath = Paths.get(uploadDirectory,file.getOriginalFilename());
+        try{
+            Files.write(fileNameAndPath,file.getBytes());
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }
+
+        ///save image name to database
+
+        StringBuilder fileName = new StringBuilder();
+        fileName.append(file.getOriginalFilename());
+        article.setImage(fileName.toString());
+
         articleRepository.save(article);
         return "redirect:list";
     }

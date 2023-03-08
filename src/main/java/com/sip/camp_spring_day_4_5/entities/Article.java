@@ -29,6 +29,9 @@ public class Article {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Provider provider;
 
+    @Column(name="picture")
+    private String image;
+
     public Provider getProvider() {
         return provider;
     }
@@ -37,9 +40,10 @@ public class Article {
         this.provider = provider;
     }
 
-    public Article(String label, float price) {
+    public Article(String label, float price,String image) {
         this.label = label;
         this.price = price;
+        this.image = image;
     }
 
     public Article() {
@@ -92,5 +96,11 @@ public class Article {
         return Objects.hash(id, label, price, provider);
     }
 
+    public String getImage() {
+        return image;
+    }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

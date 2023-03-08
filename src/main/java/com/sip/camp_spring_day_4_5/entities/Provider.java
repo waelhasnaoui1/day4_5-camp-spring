@@ -22,6 +22,9 @@ public class Provider {
     @Column(name="email")
     private String email;
 
+
+
+
     public Provider() {
     }
 
