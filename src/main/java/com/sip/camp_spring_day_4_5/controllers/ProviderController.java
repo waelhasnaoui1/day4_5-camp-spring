@@ -1,5 +1,6 @@
 package com.sip.camp_spring_day_4_5.controllers;
 
+import com.sip.camp_spring_day_4_5.entities.Article;
 import com.sip.camp_spring_day_4_5.entities.Provider;
 import com.sip.camp_spring_day_4_5.repositories.ProviderRepository;
 import com.sip.camp_spring_day_4_5.services.ProviderService;
@@ -71,5 +72,19 @@ public class ProviderController {
         providerRepository.save(provider);
         return "provider/updateProvider";
     }
+
+    @GetMapping("show/{id}")
+    public String showProvider(@PathVariable("id") long id, Model model) {
+        Provider provider = providerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid provider Id:" + id));
+        List<Article> articles = providerRepository.findArticlesByProvider(id);
+        for (Article a : articles)
+            System.out.println("Article = " + a.getLabel());
+
+        model.addAttribute("articles", articles);
+        model.addAttribute("provider", provider);
+        return "provider/showProvider";
+    }
+
 
 }

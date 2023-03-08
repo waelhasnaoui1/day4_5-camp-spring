@@ -2,6 +2,7 @@ package com.sip.camp_spring_day_4_5.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 public class Provider {
@@ -22,8 +23,16 @@ public class Provider {
     @Column(name="email")
     private String email;
 
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "provider")
+    private List<Article> articles;
 
+    public List<Article> getArticles() {
+        return articles;
+    }
 
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
+    }
 
     public Provider() {
     }
