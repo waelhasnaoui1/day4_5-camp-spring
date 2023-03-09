@@ -1,5 +1,6 @@
 package com.sip.camp_spring_day_4_5.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -24,6 +25,7 @@ public class Article {
     @Column(name="price")
     private float price;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name="provider_id",nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

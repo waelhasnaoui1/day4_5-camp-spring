@@ -1,5 +1,7 @@
 package com.sip.camp_spring_day_4_5.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -26,6 +28,7 @@ public class Provider {
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "provider")
     private List<Article> articles;
 
+    @JsonManagedReference
     public List<Article> getArticles() {
         return articles;
     }
