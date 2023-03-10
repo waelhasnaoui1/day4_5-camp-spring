@@ -45,7 +45,7 @@ public class RestProviderController {
         return provider.get();
     }
 
-    @DeleteMapping("{/providerId}")
+    @DeleteMapping("/{providerId}")
     public ResponseEntity<?> deleteProvider(@PathVariable("providerId") Long providerId){
         return providerRepository.findById(providerId).map((provider)->{
             providerRepository.delete(provider);
